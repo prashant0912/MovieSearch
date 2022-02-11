@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{
+            background-color:black;
+
+        }
+        #inp{
+           margin-left:320px;
+           width:50%;
+           height:50px;
+           font-size: 30px;
+           border-radius: 50px;
+           border:none;
+           
+        }
+        button{
+            width:200px;
+            height:55px;
+            background-color:orangered;
+            margin-bottom: 20px;
+            font-size: 40px;
+            border-radius: 70px;
+            cursor: pointer;
+            color:white;
+            border:0px;
+        
+        }
+        button:hover{
+            background-color:green;
+        }
+        #logo{
+            width:700px;
+            height: 200px;
+            margin: auto;
+        }
+        img{
+            width: 100%;
+            height: 100%;
+        }
+        #box{
+            display:grid;
+            grid-template-columns: repeat(4,1fr);
+            grid-gap:20px;
+            margin-left: 100px;
+            margin-top:2%;
+        }
+        .small_box{
+            margin-left:80%;
+        }
+       
+        #pic{
+            width:400px;
+            height:200px;
+            border-radius: 20px;
+
+        }
+        #pic:hover{
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        #pic1{
+            width:400px;
+            height:400px;
+        }
+        #error_box{
+            margin-left:25%;
+        }
+        .year{
+            color:white;
+            font-size: 25px;
+        }
+        #condition{
+            width:100px;
+            height:20px;
+            border:1px solid red;
+            color:white;
+            background-color: red;
+            border-radius: 20px;
+        }
+       
+
+    </style>
+</head>
+<body>
+    <div id = "logo"><img src="https://assets.brand.microsites.netflix.io/assets/7dc497e2-4975-11ec-a9ce-066b49664af6_cm_1440w.jpg?v=1" alt=""></div>
+    <input id = "inp" type="text" placeholder = "Search Movie ">
+    <button  onclick= "getmovie()">Search</button>
+    <div id = "box"></div>
+    
+</body>
+</html>
+<script>
+    
+    async function getmovie(){
+        var movie = document.getElementById("inp").value;
+        var url = `https://www.omdbapi.com/?t=${movie}&apikey=8bc1d4a`;
+        var res = await fetch(url);
+        var data = await res.json();
+        console.log(data);
+        if(data.Response == "True"){
+            make_page(data);
+            
+        }
+        else{
+        document.getElementById("box").innerHTML = "";
+        var div  = document.createElement("div");
+        div.setAttribute("id","error_box")
+        var img = document.createElement("img");
+        img.setAttribute("id","pic1")
+        img.src = "http://www.digitalmesh.com/blog/wp-content/uploads/2020/05/404-error.jpg";
+        div.append(img);
+        document.getElementById("box").append(div);
+
+        }
+    }
+  
+
+
+function make_page(data){
+    document.getElementById("box").innerHTML = "";
+    var movie = document.getElementById("inp").value;
+            var div  = document.createElement("div");
+            div.setAttribute("class","small_box");
+            var img = document.createElement("img");
+            img.setAttribute("id","pic");
+            img.src = data.Poster;
+            var year = document.createElement("p");
+            year.setAttribute("class","year");
+            year.textContent = `Year:${data.Year}`;
+            var title = document.createElement("p");
+            title.setAttribute("class","year");
+            title.textContent = `Title:${data.Title}`;
+            var rating = document.createElement("p");
+            rating.setAttribute("class","year");
+            var rating_data = Number(data.imdbRating);
+            if(rating_data>8.5){
+                var div1 = document.createElement("div");
+                div1.setAttribute("id","condition");
+                div1.textContent = "Recommended";
+                rating.textContent = `Rating:${rating_data}`;
+            }
+            else{
+                rating.textContent = `Rating:${rating_data}`;
+
+
+            }
+            
+             div.append(div1,img,title,year,rating);
+            document.getElementById("box").append(div);
+
+            
+        }  
+
+
+  
+
+     
+
+
+   
+   
+      
+   
+      
+
+</script>
